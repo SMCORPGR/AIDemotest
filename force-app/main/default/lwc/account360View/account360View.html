@@ -92,32 +92,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <template for:each={casesData} for:item="case">
-                                            <tr key={case.Id} class="slds-hint-parent">
+                                        <template for:each={casesData} for:item="caseRecord">
+                                            <tr key={caseRecord.Id} class="slds-hint-parent">
                                                 <td data-label="Case Number">
                                                     <div class="slds-truncate">
-                                                        <a href="#" 
-                                                           data-record-id={case.Id} 
+                                                        <a href="#"
+                                                           data-record-id={caseRecord.Id}
                                                            data-record-type="Case"
                                                            onclick={handleRecordClick}>
-                                                            {case.CaseNumber}
+                                                            {caseRecord.CaseNumber}
                                                         </a>
                                                     </div>
                                                 </td>
                                                 <td data-label="Subject">
-                                                    <div class="slds-truncate" title={case.Subject}>{case.Subject}</div>
+                                                    <div class="slds-truncate" title={caseRecord.Subject}>{caseRecord.Subject}</div>
                                                 </td>
                                                 <td data-label="Status">
                                                     <div class="slds-truncate">
-                                                        <lightning-badge label={case.Status} variant="lightest"></lightning-badge>
+                                                        <lightning-badge label={caseRecord.Status} variant="lightest"></lightning-badge>
                                                     </div>
                                                 </td>
                                                 <td data-label="Priority">
-                                                    <div class="slds-truncate">{case.Priority}</div>
+                                                    <div class="slds-truncate">{caseRecord.Priority}</div>
                                                 </td>
                                                 <td data-label="Created Date">
                                                     <div class="slds-truncate">
-                                                        <lightning-formatted-date-time value={case.CreatedDate}></lightning-formatted-date-time>
+                                                        <lightning-formatted-date-time value={caseRecord.CreatedDate}></lightning-formatted-date-time>
                                                     </div>
                                                 </td>
                                             </tr>

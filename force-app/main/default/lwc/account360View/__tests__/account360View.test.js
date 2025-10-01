@@ -1,6 +1,12 @@
 import { createElement } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
 import Account360View from 'c/account360View';
+
+// Mock Lightning components
+jest.mock('lightning/formattedDate', () => ({ default: 'lightning-formatted-date' }), { virtual: true });
+jest.mock('lightning/formattedDateTime', () => ({ default: 'lightning-formatted-date-time' }), { virtual: true });
+jest.mock('lightning/formattedEmail', () => ({ default: 'lightning-formatted-email' }), { virtual: true });
+jest.mock('lightning/formattedPhone', () => ({ default: 'lightning-formatted-phone' }), { virtual: true });
+jest.mock('lightning/formattedNumber', () => ({ default: 'lightning-formatted-number' }), { virtual: true });
 
 // Mock Apex methods
 import getCases from '@salesforce/apex/Account360Controller.getCases';

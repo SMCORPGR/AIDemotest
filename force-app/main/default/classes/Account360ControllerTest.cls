@@ -66,7 +66,7 @@ public class Account360ControllerTest {
         for (Integer i = 1; i <= 2; i++) {
             testTasks.add(new Task(
                 Subject = 'Test Task ' + i,
-                AccountId = testAccount.Id,
+                WhatId = testAccount.Id,
                 Status = 'Not Started',
                 Priority = 'Normal',
                 ActivityDate = Date.today().addDays(i)
@@ -79,7 +79,7 @@ public class Account360ControllerTest {
         for (Integer i = 1; i <= 2; i++) {
             testEvents.add(new Event(
                 Subject = 'Test Event ' + i,
-                AccountId = testAccount.Id,
+                WhatId = testAccount.Id,
                 StartDateTime = DateTime.now().addDays(i),
                 EndDateTime = DateTime.now().addDays(i).addHours(1)
             ));

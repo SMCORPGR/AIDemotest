@@ -22,7 +22,6 @@
             </objects>
             <supportedFormFactors>
                 <supportedFormFactor type="Large"/>
-                <supportedFormFactor type="Medium"/>
                 <supportedFormFactor type="Small"/>
             </supportedFormFactors>
         </targetConfig>
@@ -31,20 +30,18 @@
         <targetConfig targets="lightning__AppPage">
             <supportedFormFactors>
                 <supportedFormFactor type="Large"/>
-                <supportedFormFactor type="Medium"/>
                 <supportedFormFactor type="Small"/>
             </supportedFormFactors>
         </targetConfig>
-        
+
         <!-- Home Page Configuration -->
         <targetConfig targets="lightning__HomePage">
             <supportedFormFactors>
                 <supportedFormFactor type="Large"/>
-                <supportedFormFactor type="Medium"/>
                 <supportedFormFactor type="Small"/>
             </supportedFormFactors>
         </targetConfig>
-        
+
         <!-- Community Page Configuration -->
         <targetConfig targets="lightningCommunity__Page,lightningCommunity__Default">
             <objects>
@@ -52,14 +49,11 @@
             </objects>
             <supportedFormFactors>
                 <supportedFormFactor type="Large"/>
-                <supportedFormFactor type="Medium"/>
                 <supportedFormFactor type="Small"/>
             </supportedFormFactors>
         </targetConfig>
     </targetConfigs>
     
     <!-- Design-time properties for App Builder -->
-    <hasStepByStepInstructions>false</hasStepByStepInstructions>
-    <isExplicitlySetDefaultHeight>false</isExplicitlySetDefaultHeight>
     <masterLabel>Account 360 View</masterLabel>
 </LightningComponentBundle>
