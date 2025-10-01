@@ -1,0 +1,227 @@
+/* Account 360 View Component Styles */
+
+.account-header {
+    background-color: #f3f3f3;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    border: 1px solid #dddbda;
+}
+
+.account-header .slds-form-element__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.0625rem;
+    line-height: 1.25;
+    color: #706e6b;
+}
+
+.account-header .slds-text-heading_small {
+    color: #080707;
+    font-weight: 700;
+}
+
+.tab-content {
+    min-height: 200px;
+    padding: 0.5rem 0;
+}
+
+/* Table styling enhancements */
+.slds-table th {
+    background-color: #fafaf9;
+    border-bottom: 2px solid #dddbda;
+    font-weight: 700;
+}
+
+.slds-table td {
+    vertical-align: middle;
+}
+
+.slds-table tbody tr:hover {
+    background-color: #f3f3f3;
+}
+
+/* Link styling */
+.slds-table a {
+    color: #0176d3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.slds-table a:hover {
+    color: #014486;
+    text-decoration: underline;
+}
+
+/* Badge customization */
+lightning-badge {
+    --sds-c-badge-color-background: #ecebea;
+    --sds-c-badge-text-color: #080707;
+}
+
+/* Empty state styling */
+.slds-illustration {
+    text-align: center;
+    padding: 2rem;
+}
+
+.slds-illustration h3 {
+    color: #706e6b;
+    margin-bottom: 0.5rem;
+}
+
+.slds-illustration p {
+    color: #706e6b;
+}
+
+/* Loading state */
+.slds-is-relative {
+    position: relative;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .account-header .slds-grid {
+        flex-direction: column;
+    }
+    
+    .account-header .slds-col {
+        margin-bottom: 0.5rem;
+    }
+    
+    .slds-table {
+        font-size: 0.875rem;
+    }
+    
+    .tab-content {
+        padding: 0.25rem 0;
+    }
+    
+    .slds-scrollable_y {
+        height: 250px !important;
+    }
+}
+
+/* Accessibility enhancements */
+.slds-table th:focus,
+.slds-table td:focus {
+    outline: 2px solid #0176d3;
+    outline-offset: -2px;
+}
+
+.slds-table a:focus {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+/* Tab content spacing */
+.slds-tabs_default__content {
+    padding: 1rem 0;
+}
+
+/* Custom scrollbar for webkit browsers */
+.slds-scrollable_y::-webkit-scrollbar {
+    width: 8px;
+}
+
+.slds-scrollable_y::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.slds-scrollable_y::-webkit-scrollbar-thumb {
+    background: #c9c7c5;
+    border-radius: 4px;
+}
+
+.slds-scrollable_y::-webkit-scrollbar-thumb:hover {
+    background: #706e6b;
+}
+
+/* Error message styling */
+.slds-alert_error {
+    margin: 0.5rem 0;
+}
+
+/* Refresh button styling */
+lightning-button-icon[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Tab label styling for counts */
+lightning-tab[label*="("] {
+    font-weight: 500;
+}
+
+/* Table cell content alignment */
+.slds-table td[data-label="Amount"] {
+    text-align: right;
+}
+
+.slds-table td[data-label="Close Date"],
+.slds-table td[data-label="Created Date"] {
+    white-space: nowrap;
+}
+
+/* Status badge variants */
+lightning-badge[label="New"] {
+    --sds-c-badge-color-background: #ecebea;
+    --sds-c-badge-text-color: #080707;
+}
+
+lightning-badge[label="In Progress"] {
+    --sds-c-badge-color-background: #ffe066;
+    --sds-c-badge-text-color: #080707;
+}
+
+lightning-badge[label="Closed"] {
+    --sds-c-badge-color-background: #4bca81;
+    --sds-c-badge-text-color: #ffffff;
+}
+
+/* Opportunity stage badges */
+lightning-badge[label="Prospecting"] {
+    --sds-c-badge-color-background: #ecebea;
+    --sds-c-badge-text-color: #080707;
+}
+
+lightning-badge[label="Qualification"] {
+    --sds-c-badge-color-background: #ffe066;
+    --sds-c-badge-text-color: #080707;
+}
+
+lightning-badge[label="Proposal"] {
+    --sds-c-badge-color-background: #ff9a3c;
+    --sds-c-badge-text-color: #ffffff;
+}
+
+lightning-badge[label="Closed Won"] {
+    --sds-c-badge-color-background: #4bca81;
+    --sds-c-badge-text-color: #ffffff;
+}
+
+lightning-badge[label="Closed Lost"] {
+    --sds-c-badge-color-background: #ea001e;
+    --sds-c-badge-text-color: #ffffff;
+}
+
+/* Print styles */
+@media print {
+    .account-header {
+        background-color: transparent !important;
+        border: 1px solid #000 !important;
+    }
+    
+    .slds-table {
+        border-collapse: collapse;
+    }
+    
+    .slds-table th,
+    .slds-table td {
+        border: 1px solid #000 !important;
+    }
+    
+    lightning-button-icon {
+        display: none !important;
+    }
+}

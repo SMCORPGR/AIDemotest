@@ -1,0 +1,279 @@
+<template>
+    <lightning-card title="Account 360 View" icon-name="standard:account">
+        <!-- Header with account info and refresh button -->
+        <div slot="actions">
+            <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="border-filled" 
+                alternative-text="Refresh Data" 
+                title="Refresh Data"
+                onclick={handleRefresh}
+                disabled={isLoading}>
+            </lightning-button-icon>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- Loading spinner -->
+            <template if:true={isLoading}>
+                <div class="slds-is-relative slds-p-around_medium">
+                    <lightning-spinner 
+                        alternative-text="Loading..." 
+                        size="small">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error message -->
+            <template if:true={error}>
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_small" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>Error loading data: {error.body.message}</h2>
+                </div>
+            </template>
+
+            <!-- Account header info -->
+            <template if:true={account.data}>
+                <div class="account-header slds-m-bottom_medium">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label slds-text-title_caps">Account Name</label>
+                                <div class="slds-form-element__control">
+                                    <span class="slds-text-heading_small">{accountName}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label slds-text-title_caps">Type</label>
+                                <div class="slds-form-element__control">
+                                    <span class="slds-text-body_regular">{accountType}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label slds-text-title_caps">Industry</label>
+                                <div class="slds-form-element__control">
+                                    <span class="slds-text-body_regular">{accountIndustry}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Tab set for related records -->
+            <lightning-tabset active-tab-value={activeTab} onactive={handleTabChange}>
+                
+                <!-- Cases Tab -->
+                <lightning-tab label={casesTabLabel} value="cases">
+                    <div class="tab-content">
+                        <template if:true={hasCases}>
+                            <div class="slds-scrollable_y" style="height: 300px;">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Case Number">Case Number</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Subject">Subject</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Status">Status</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Priority">Priority</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Created Date">Created Date</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={casesData} for:item="case">
+                                            <tr key={case.Id} class="slds-hint-parent">
+                                                <td data-label="Case Number">
+                                                    <div class="slds-truncate">
+                                                        <a href="#" 
+                                                           data-record-id={case.Id} 
+                                                           data-record-type="Case"
+                                                           onclick={handleRecordClick}>
+                                                            {case.CaseNumber}
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Subject">
+                                                    <div class="slds-truncate" title={case.Subject}>{case.Subject}</div>
+                                                </td>
+                                                <td data-label="Status">
+                                                    <div class="slds-truncate">
+                                                        <lightning-badge label={case.Status} variant="lightest"></lightning-badge>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Priority">
+                                                    <div class="slds-truncate">{case.Priority}</div>
+                                                </td>
+                                                <td data-label="Created Date">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-date-time value={case.CreatedDate}></lightning-formatted-date-time>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                        <template if:false={hasCases}>
+                            <div class="slds-illustration slds-illustration_small">
+                                <div class="slds-text-longform">
+                                    <h3 class="slds-text-heading_medium">No Cases Found</h3>
+                                    <p class="slds-text-body_regular">This account doesn't have any cases yet.</p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </lightning-tab>
+
+                <!-- Contacts Tab -->
+                <lightning-tab label={contactsTabLabel} value="contacts">
+                    <div class="tab-content">
+                        <template if:true={hasContacts}>
+                            <div class="slds-scrollable_y" style="height: 300px;">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Name">Name</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Title">Title</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Email">Email</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Phone">Phone</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={contactsData} for:item="contact">
+                                            <tr key={contact.Id} class="slds-hint-parent">
+                                                <td data-label="Name">
+                                                    <div class="slds-truncate">
+                                                        <a href="#" 
+                                                           data-record-id={contact.Id} 
+                                                           data-record-type="Contact"
+                                                           onclick={handleRecordClick}>
+                                                            {contact.Name}
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Title">
+                                                    <div class="slds-truncate" title={contact.Title}>{contact.Title}</div>
+                                                </td>
+                                                <td data-label="Email">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-email value={contact.Email}></lightning-formatted-email>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Phone">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-phone value={contact.Phone}></lightning-formatted-phone>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                        <template if:false={hasContacts}>
+                            <div class="slds-illustration slds-illustration_small">
+                                <div class="slds-text-longform">
+                                    <h3 class="slds-text-heading_medium">No Contacts Found</h3>
+                                    <p class="slds-text-body_regular">This account doesn't have any contacts yet.</p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </lightning-tab>
+
+                <!-- Opportunities Tab -->
+                <lightning-tab label={opportunitiesTabLabel} value="opportunities">
+                    <div class="tab-content">
+                        <template if:true={hasOpportunities}>
+                            <div class="slds-scrollable_y" style="height: 300px;">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Opportunity Name">Opportunity Name</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Stage">Stage</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Amount">Amount</div>
+                                            </th>
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-truncate" title="Close Date">Close Date</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={opportunitiesData} for:item="opportunity">
+                                            <tr key={opportunity.Id} class="slds-hint-parent">
+                                                <td data-label="Opportunity Name">
+                                                    <div class="slds-truncate">
+                                                        <a href="#" 
+                                                           data-record-id={opportunity.Id} 
+                                                           data-record-type="Opportunity"
+                                                           onclick={handleRecordClick}>
+                                                            {opportunity.Name}
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Stage">
+                                                    <div class="slds-truncate">
+                                                        <lightning-badge label={opportunity.StageName} variant="lightest"></lightning-badge>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Amount">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-number 
+                                                            value={opportunity.Amount} 
+                                                            format-style="currency" 
+                                                            currency-code="USD">
+                                                        </lightning-formatted-number>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Close Date">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-date value={opportunity.CloseDate}></lightning-formatted-date>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                        <template if:false={hasOpportunities}>
+                            <div class="slds-illustration slds-illustration_small">
+                                <div class="slds-text-longform">
+                                    <h3 class="slds-text-heading_medium">No Opportunities Found</h3>
+                                    <p class="slds-text-body_regular">This account doesn't have any opportunities yet.</p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </lightning-tab>
+
+            </lightning-tabset>
+        </div>
+    </lightning-card>
+</template>

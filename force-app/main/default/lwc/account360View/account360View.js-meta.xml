@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <isExposed>true</isExposed>
+    <description>Account 360 View component that displays related Cases, Contacts, and Opportunities in a tabbed interface for comprehensive account management.</description>
+    
+    <!-- Target configurations -->
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    
+    <!-- Target-specific configurations -->
+    <targetConfigs>
+        <!-- Record Page Configuration -->
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Account</object>
+            </objects>
+            <supportedFormFactors>
+                <supportedFormFactor type="Large"/>
+                <supportedFormFactor type="Medium"/>
+                <supportedFormFactor type="Small"/>
+            </supportedFormFactors>
+        </targetConfig>
+        
+        <!-- App Page Configuration -->
+        <targetConfig targets="lightning__AppPage">
+            <supportedFormFactors>
+                <supportedFormFactor type="Large"/>
+                <supportedFormFactor type="Medium"/>
+                <supportedFormFactor type="Small"/>
+            </supportedFormFactors>
+        </targetConfig>
+        
+        <!-- Home Page Configuration -->
+        <targetConfig targets="lightning__HomePage">
+            <supportedFormFactors>
+                <supportedFormFactor type="Large"/>
+                <supportedFormFactor type="Medium"/>
+                <supportedFormFactor type="Small"/>
+            </supportedFormFactors>
+        </targetConfig>
+        
+        <!-- Community Page Configuration -->
+        <targetConfig targets="lightningCommunity__Page,lightningCommunity__Default">
+            <objects>
+                <object>Account</object>
+            </objects>
+            <supportedFormFactors>
+                <supportedFormFactor type="Large"/>
+                <supportedFormFactor type="Medium"/>
+                <supportedFormFactor type="Small"/>
+            </supportedFormFactors>
+        </targetConfig>
+    </targetConfigs>
+    
+    <!-- Design-time properties for App Builder -->
+    <hasStepByStepInstructions>false</hasStepByStepInstructions>
+    <isExplicitlySetDefaultHeight>false</isExplicitlySetDefaultHeight>
+    <masterLabel>Account 360 View</masterLabel>
+</LightningComponentBundle>
