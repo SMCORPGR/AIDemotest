@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# Quick launcher for the Smart Demo Assistant with Scratch Org Setup
+# Usage: ./demo
+
+echo "🚀 Starting Smart Salesforce Development Demo Assistant..."
+echo ""
+
+# Check if we're in the right directory
+if [ ! -f ".augment/scripts/smart-demo.sh" ]; then
+    echo "❌ Error: Please run this from the AIDemoTest project root directory"
+    exit 1
+fi
+
+# Function to check if scratch org exists and is active
+check_scratch_org() {
+    local org_info=$(sf org list --json 2>/dev/null | jq -r '.result.scratchOrgs[] | select(.alias == "demo-scratch") | .status' 2>/dev/null)
+    if [ "$org_info" = "Active" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function to create scratch org
+create_scratch_org() {
+    echo "📦 Creating scratch org for demo..."
+
+    # Create project-scratch-def.json if it doesn't exist
+    if [ ! -f "config/project-scratch-def.json" ]; then
+        echo "📝 Creating scratch org definition..."
+        mkdir -p config
+        cat > config/project-scratch-def.json << 'EOF'
+{
+  "orgName": "AIDemoTest Scratch Org",
+  "edition": "Developer",
+  "features": ["EnableSetPasswordInApi"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    }
+  }
+}
+EOF
+    fi
+
+    # Create scratch org
+    sf org create scratch --definition-file config/project-scratch-def.json --alias demo-scratch --duration-days 7 --set-default
+
+    if [ $? -eq 0 ]; then
+        echo "✅ Scratch org created successfully: demo-scratch"
+        return 0
+    else
+        echo "❌ Failed to create scratch org"
+        return 1
+    fi
+}
+
+# Function to set default org
+set_default_org() {
+    sf config set target-org=demo-scratch
+    echo "✅ Set demo-scratch as default org"
+}
+
+# Check for Salesforce CLI
+if ! command -v sf &> /dev/null; then
+    echo "❌ Salesforce CLI not found. Please install it first:"
+    echo "   npm install -g @salesforce/cli"
+    exit 1
+fi
+
+# Check authentication
+echo "🔍 Checking Salesforce authentication..."
+if ! sf org list --json &> /dev/null; then
+    echo "❌ Not authenticated with Salesforce. Please run:"
+    echo "   sf org login web --set-default-dev-hub"
+    exit 1
+fi
+
+# Check if scratch org exists
+echo "🔍 Checking for existing scratch org..."
+if check_scratch_org; then
+    echo "✅ Found active scratch org: demo-scratch"
+    set_default_org
+else
+    echo "📦 No active scratch org found. Creating new one..."
+    if ! create_scratch_org; then
+        echo "❌ Failed to create scratch org. Please check your Dev Hub authentication."
+        exit 1
+    fi
+fi
+
+# Verify org is accessible
+echo "🔍 Verifying org access..."
+if sf org display --json &> /dev/null; then
+    echo "✅ Scratch org is ready for demo"
+else
+    echo "❌ Cannot access scratch org. Please check your setup."
+    exit 1
+fi
+
+echo ""
+echo "🎯 Demo Environment Ready!"
+echo "   Org Alias: demo-scratch"
+echo "   Org Type: Scratch Org"
+echo ""
+
+# Launch the smart demo assistant
+exec ./.augment/scripts/smart-demo.sh "$@"

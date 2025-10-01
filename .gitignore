@@ -46,3 +46,7 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+.augment/DEMO_GUIDE.md
+.augment/scripts/demo-assistant.py
+.augment/scripts/demo-workflow.sh
+.augment/scripts/smart-demo.sh
