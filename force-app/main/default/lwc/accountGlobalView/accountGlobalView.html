@@ -1,0 +1,333 @@
+<template>
+    <!-- Loading Spinner -->
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+    </template>
+
+    <!-- Error Message -->
+    <template if:true={error}>
+        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+            <span class="slds-assistive-text">Error</span>
+            <h2>Error loading data. Please try refreshing the page.</h2>
+        </div>
+    </template>
+
+    <!-- Main Component -->
+    <div class="slds-card account-global-view">
+        <!-- Header Section -->
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:account" size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span class="slds-text-heading_medium">Account Global View</span>
+                    </h2>
+                    <p class="slds-text-body_small slds-line-height_reset">
+                        {accountName} • {accountType} • {accountIndustry}
+                    </p>
+                </div>
+            </header>
+            <div class="slds-no-flex">
+                <lightning-button-group>
+                    <lightning-button 
+                        label="Refresh" 
+                        icon-name="utility:refresh" 
+                        onclick={handleRefresh}>
+                    </lightning-button>
+                    <lightning-button 
+                        label="Filters" 
+                        icon-name="utility:filterList" 
+                        onclick={toggleFilters}>
+                    </lightning-button>
+                </lightning-button-group>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <template if:true={showFilters}>
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input 
+                            type="search" 
+                            label="Search Records" 
+                            value={searchTerm} 
+                            onchange={handleSearch}
+                            placeholder="Search across all tabs...">
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Tab Set -->
+        <div class="slds-card__body slds-card__body_inner">
+            <lightning-tabset active-tab-value={activeTab} onactive={handleTabChange}>
+                
+                <!-- Summary Tab -->
+                <lightning-tab label="Summary" value="summary">
+                    <div class="summary-container">
+                        <!-- Key Metrics Cards -->
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <div class="slds-col slds-size_1-of-4">
+                                <div class="metric-card slds-box slds-theme_default">
+                                    <div class="slds-text-align_center">
+                                        <lightning-icon icon-name="utility:currency" size="large" class="metric-icon"></lightning-icon>
+                                        <div class="slds-text-heading_large slds-text-color_success">{accountRevenue}</div>
+                                        <div class="slds-text-body_small">Annual Revenue</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4">
+                                <div class="metric-card slds-box slds-theme_default">
+                                    <div class="slds-text-align_center">
+                                        <lightning-icon icon-name="utility:case" size="large" class="metric-icon"></lightning-icon>
+                                        <div class="slds-text-heading_large slds-text-color_warning">{openCasesCount}</div>
+                                        <div class="slds-text-body_small">Open Cases</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4">
+                                <div class="metric-card slds-box slds-theme_default">
+                                    <div class="slds-text-align_center">
+                                        <lightning-icon icon-name="utility:people" size="large" class="metric-icon"></lightning-icon>
+                                        <div class="slds-text-heading_large slds-text-color_default">{totalContacts}</div>
+                                        <div class="slds-text-body_small">Total Contacts</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4">
+                                <div class="metric-card slds-box slds-theme_default">
+                                    <div class="slds-text-align_center">
+                                        <lightning-icon icon-name="utility:opportunity" size="large" class="metric-icon"></lightning-icon>
+                                        <div class="slds-text-heading_large slds-text-color_success">{pipelineValue}</div>
+                                        <div class="slds-text-body_small">Pipeline Value</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="slds-section slds-is-open slds-m-top_large">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Quick Actions">Quick Actions</span>
+                            </h3>
+                            <div class="slds-section__content">
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col">
+                                        <lightning-button 
+                                            variant="brand" 
+                                            label="New Case" 
+                                            icon-name="utility:case" 
+                                            onclick={handleNewCase}
+                                            class="slds-m-right_small">
+                                        </lightning-button>
+                                        <lightning-button 
+                                            variant="brand" 
+                                            label="New Contact" 
+                                            icon-name="utility:people" 
+                                            onclick={handleNewContact}
+                                            class="slds-m-right_small">
+                                        </lightning-button>
+                                        <lightning-button 
+                                            variant="brand" 
+                                            label="New Opportunity" 
+                                            icon-name="utility:opportunity" 
+                                            onclick={handleNewOpportunity}>
+                                        </lightning-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-tab>
+
+                <!-- Cases Tab -->
+                <lightning-tab label={casesTabLabel} value="cases">
+                    <div class="tab-header">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col">
+                                <h3 class="slds-text-heading_small">Related Cases</h3>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <lightning-button 
+                                    label="Export" 
+                                    icon-name="utility:download" 
+                                    data-object="Case"
+                                    onclick={handleExport}
+                                    size="small">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <template if:true={casesData}>
+                        <template if:true={casesData.length}>
+                            <lightning-datatable
+                                key-field="Id"
+                                data={casesData}
+                                columns={caseColumns}
+                                onsort={handleSort}
+                                sorted-by={sortField}
+                                sorted-direction={sortDirection}
+                                hide-checkbox-column="true"
+                                show-row-number-column="true"
+                                resize-column-disabled="true"
+                                onrowaction={handleRecordNavigation}>
+                            </lightning-datatable>
+                        </template>
+                        <template if:false={casesData.length}>
+                            <div class="slds-illustration slds-illustration_small">
+                                <div class="slds-text-align_center">
+                                    <lightning-icon icon-name="utility:case" size="large" class="slds-m-bottom_small"></lightning-icon>
+                                    <h3 class="slds-text-heading_medium">No Cases Found</h3>
+                                    <p class="slds-text-body_regular">There are no cases associated with this account.</p>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </lightning-tab>
+
+                <!-- Contacts Tab -->
+                <lightning-tab label={contactsTabLabel} value="contacts">
+                    <div class="tab-header">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col">
+                                <h3 class="slds-text-heading_small">Related Contacts</h3>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <lightning-button 
+                                    label="Export" 
+                                    icon-name="utility:download" 
+                                    data-object="Contact"
+                                    onclick={handleExport}
+                                    size="small">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <template if:true={contactsData}>
+                        <template if:true={contactsData.length}>
+                            <lightning-datatable
+                                key-field="Id"
+                                data={contactsData}
+                                columns={contactColumns}
+                                onsort={handleSort}
+                                sorted-by={sortField}
+                                sorted-direction={sortDirection}
+                                hide-checkbox-column="true"
+                                show-row-number-column="true"
+                                resize-column-disabled="true"
+                                onrowaction={handleRecordNavigation}>
+                            </lightning-datatable>
+                        </template>
+                        <template if:false={contactsData.length}>
+                            <div class="slds-illustration slds-illustration_small">
+                                <div class="slds-text-align_center">
+                                    <lightning-icon icon-name="utility:people" size="large" class="slds-m-bottom_small"></lightning-icon>
+                                    <h3 class="slds-text-heading_medium">No Contacts Found</h3>
+                                    <p class="slds-text-body_regular">There are no contacts associated with this account.</p>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </lightning-tab>
+
+                <!-- Opportunities Tab -->
+                <lightning-tab label={opportunitiesTabLabel} value="opportunities">
+                    <div class="tab-header">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col">
+                                <h3 class="slds-text-heading_small">Related Opportunities</h3>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <lightning-button 
+                                    label="Export" 
+                                    icon-name="utility:download" 
+                                    data-object="Opportunity"
+                                    onclick={handleExport}
+                                    size="small">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <template if:true={opportunitiesData}>
+                        <template if:true={opportunitiesData.length}>
+                            <lightning-datatable
+                                key-field="Id"
+                                data={opportunitiesData}
+                                columns={opportunityColumns}
+                                onsort={handleSort}
+                                sorted-by={sortField}
+                                sorted-direction={sortDirection}
+                                hide-checkbox-column="true"
+                                show-row-number-column="true"
+                                resize-column-disabled="true"
+                                onrowaction={handleRecordNavigation}>
+                            </lightning-datatable>
+                        </template>
+                        <template if:false={opportunitiesData.length}>
+                            <div class="slds-illustration slds-illustration_small">
+                                <div class="slds-text-align_center">
+                                    <lightning-icon icon-name="utility:opportunity" size="large" class="slds-m-bottom_small"></lightning-icon>
+                                    <h3 class="slds-text-heading_medium">No Opportunities Found</h3>
+                                    <p class="slds-text-body_regular">There are no opportunities associated with this account.</p>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </lightning-tab>
+
+                <!-- Recent Activities Tab -->
+                <lightning-tab label={activitiesTabLabel} value="activities">
+                    <div class="tab-header">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col">
+                                <h3 class="slds-text-heading_small">Recent Activities</h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <template if:true={recentActivities}>
+                        <template if:true={recentActivities.length}>
+                            <div class="activities-timeline">
+                                <template for:each={recentActivities} for:item="activity">
+                                    <div key={activity.Id} class="slds-timeline__item">
+                                        <span class="slds-timeline__marker slds-timeline__marker_icon">
+                                            <lightning-icon icon-name={activity.IconName} size="x-small"></lightning-icon>
+                                        </span>
+                                        <div class="slds-timeline__item_details">
+                                            <h3 class="slds-truncate" title={activity.Subject}>
+                                                <a href="#" data-record-id={activity.Id} onclick={handleRecordNavigation}>
+                                                    {activity.Subject}
+                                                </a>
+                                            </h3>
+                                            <p class="slds-text-body_small">{activity.Description}</p>
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                <lightning-formatted-date-time value={activity.CreatedDate}></lightning-formatted-date-time>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={recentActivities.length}>
+                            <div class="slds-illustration slds-illustration_small">
+                                <div class="slds-text-align_center">
+                                    <lightning-icon icon-name="utility:activity" size="large" class="slds-m-bottom_small"></lightning-icon>
+                                    <h3 class="slds-text-heading_medium">No Recent Activities</h3>
+                                    <p class="slds-text-body_regular">There are no recent activities for this account.</p>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </lightning-tab>
+
+            </lightning-tabset>
+        </div>
+    </div>
+</template>
