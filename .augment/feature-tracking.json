@@ -1,0 +1,175 @@
+{
+  "feature_tracking": {
+    "salesforce_components": {
+      "apex_classes": {
+        "path": "force-app/main/default/classes/",
+        "file_pattern": "*.cls",
+        "metadata_file": "*.cls-meta.xml",
+        "tracking": {
+          "link_to_jira": true,
+          "auto_detect_changes": true,
+          "require_test_coverage": true,
+          "min_coverage_percentage": 85
+        }
+      },
+      "apex_triggers": {
+        "path": "force-app/main/default/triggers/",
+        "file_pattern": "*.trigger",
+        "metadata_file": "*.trigger-meta.xml",
+        "tracking": {
+          "link_to_jira": true,
+          "auto_detect_changes": true,
+          "require_test_coverage": true,
+          "min_coverage_percentage": 85
+        }
+      },
+      "lwc_components": {
+        "path": "force-app/main/default/lwc/",
+        "file_pattern": "**/*",
+        "tracking": {
+          "link_to_jira": true,
+          "auto_detect_changes": true,
+          "require_jest_tests": true,
+          "test_file_pattern": "**/__tests__/*.test.js"
+        }
+      },
+      "aura_components": {
+        "path": "force-app/main/default/aura/",
+        "file_pattern": "**/*",
+        "tracking": {
+          "link_to_jira": true,
+          "auto_detect_changes": true,
+          "require_tests": false
+        }
+      },
+      "flows": {
+        "path": "force-app/main/default/flows/",
+        "file_pattern": "*.flow-meta.xml",
+        "tracking": {
+          "link_to_jira": true,
+          "auto_detect_changes": true,
+          "require_documentation": true
+        }
+      },
+      "custom_objects": {
+        "path": "force-app/main/default/objects/",
+        "file_pattern": "**/*.object-meta.xml",
+        "tracking": {
+          "link_to_jira": true,
+          "auto_detect_changes": true,
+          "track_field_changes": true,
+          "track_permission_changes": true
+        }
+      },
+      "permission_sets": {
+        "path": "force-app/main/default/permissionsets/",
+        "file_pattern": "*.permissionset-meta.xml",
+        "tracking": {
+          "link_to_jira": true,
+          "auto_detect_changes": true,
+          "require_security_review": true
+        }
+      }
+    },
+    "traceability_matrix": {
+      "jira_ticket": {
+        "links_to": ["git_branch", "commits", "pull_request", "salesforce_components", "test_cases"]
+      },
+      "git_branch": {
+        "links_to": ["jira_ticket", "commits", "pull_request", "changed_files"]
+      },
+      "commits": {
+        "links_to": ["jira_ticket", "git_branch", "changed_files", "test_results"]
+      },
+      "salesforce_components": {
+        "links_to": ["jira_ticket", "test_classes", "test_coverage", "deployment_history"]
+      },
+      "test_cases": {
+        "links_to": ["jira_ticket", "test_execution", "test_results", "coverage_reports"]
+      }
+    },
+    "change_detection": {
+      "file_monitoring": {
+        "enabled": true,
+        "watch_paths": [
+          "force-app/main/default/classes/",
+          "force-app/main/default/triggers/",
+          "force-app/main/default/lwc/",
+          "force-app/main/default/aura/",
+          "force-app/main/default/flows/",
+          "force-app/main/default/objects/",
+          "force-app/main/default/permissionsets/"
+        ],
+        "ignore_patterns": [
+          "**/*.log",
+          "**/node_modules/**",
+          "**/.sfdx/**"
+        ]
+      },
+      "auto_linking": {
+        "enabled": true,
+        "link_strategy": "commit_message_parsing",
+        "fallback_strategy": "branch_name_parsing"
+      }
+    },
+    "reporting": {
+      "feature_completion": {
+        "metrics": [
+          "development_progress",
+          "test_coverage",
+          "code_review_status",
+          "deployment_status"
+        ]
+      },
+      "quality_gates": {
+        "code_coverage_threshold": 85,
+        "security_scan_required": true,
+        "performance_test_required": false,
+        "documentation_required": true
+      }
+    }
+  },
+  "test_case_management": {
+    "generation_rules": {
+      "apex_classes": {
+        "auto_generate": true,
+        "template": "apex_test_template",
+        "naming_convention": "{ClassName}Test",
+        "test_methods": [
+          "testPositiveScenario",
+          "testNegativeScenario",
+          "testBulkOperations",
+          "testExceptionHandling"
+        ]
+      },
+      "lwc_components": {
+        "auto_generate": true,
+        "template": "jest_test_template",
+        "naming_convention": "{componentName}.test.js",
+        "test_scenarios": [
+          "component_rendering",
+          "user_interactions",
+          "data_binding",
+          "error_handling"
+        ]
+      },
+      "flows": {
+        "auto_generate": false,
+        "manual_test_cases": true,
+        "test_scenarios": [
+          "happy_path",
+          "error_conditions",
+          "edge_cases",
+          "user_permissions"
+        ]
+      }
+    },
+    "execution_tracking": {
+      "link_to_jira": true,
+      "auto_update_status": true,
+      "track_execution_time": true,
+      "capture_screenshots": true,
+      "log_test_data": true
+    }
+  }
+}

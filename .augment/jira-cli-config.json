@@ -1,0 +1,147 @@
+{
+  "jira_cli": {
+    "connection": {
+      "host": "https://your-domain.atlassian.net",
+      "username": "your-email@company.com",
+      "api_token_env": "JIRA_API_TOKEN"
+    },
+    "project": {
+      "key": "ALAMEDA",
+      "default_assignee": "current_user"
+    },
+    "templates": {
+      "story": {
+        "summary": "{title}",
+        "description": "{description}\n\n## Acceptance Criteria\n{acceptance_criteria}\n\n## Technical Notes\n{technical_notes}",
+        "issue_type": "Story",
+        "priority": "Medium",
+        "custom_fields": {
+          "salesforce_component_type": "{component_type}",
+          "component_name": "{component_name}",
+          "test_coverage_target": 85
+        }
+      },
+      "task": {
+        "summary": "{title}",
+        "description": "{description}\n\n## Implementation Details\n{implementation_details}",
+        "issue_type": "Task",
+        "priority": "Medium",
+        "custom_fields": {
+          "salesforce_component_type": "{component_type}",
+          "component_name": "{component_name}"
+        }
+      },
+      "bug": {
+        "summary": "{title}",
+        "description": "## Problem Description\n{description}\n\n## Steps to Reproduce\n{steps_to_reproduce}\n\n## Expected Behavior\n{expected_behavior}\n\n## Actual Behavior\n{actual_behavior}\n\n## Environment\n{environment}",
+        "issue_type": "Bug",
+        "priority": "High",
+        "custom_fields": {
+          "deployment_environment": "{environment}"
+        }
+      },
+      "test_case": {
+        "summary": "Test: {title}",
+        "description": "Test case for {linked_story}",
+        "issue_type": "Test Case",
+        "priority": "Medium",
+        "custom_fields": {
+          "test_steps": "{test_steps}",
+          "expected_result": "{expected_result}",
+          "test_data": "{test_data}"
+        }
+      }
+    },
+    "quick_actions": {
+      "create_story": {
+        "command": "jira create story",
+        "prompts": [
+          "title",
+          "description",
+          "acceptance_criteria",
+          "component_type",
+          "component_name"
+        ]
+      },
+      "create_task": {
+        "command": "jira create task",
+        "prompts": [
+          "title",
+          "description",
+          "implementation_details",
+          "component_type"
+        ]
+      },
+      "create_bug": {
+        "command": "jira create bug",
+        "prompts": [
+          "title",
+          "description",
+          "steps_to_reproduce",
+          "expected_behavior",
+          "actual_behavior",
+          "environment"
+        ]
+      },
+      "transition": {
+        "command": "jira transition",
+        "common_transitions": [
+          "In Progress",
+          "Code Review",
+          "Testing",
+          "Done"
+        ]
+      }
+    },
+    "search_filters": {
+      "my_open_issues": "project = ALAMEDA AND assignee = currentUser() AND status != Done",
+      "current_sprint": "project = ALAMEDA AND sprint in openSprints()",
+      "ready_for_review": "project = ALAMEDA AND status = 'Code Review'",
+      "in_testing": "project = ALAMEDA AND status = Testing",
+      "recent_bugs": "project = ALAMEDA AND issuetype = Bug AND created >= -7d"
+    },
+    "automation": {
+      "branch_creation": {
+        "enabled": true,
+        "pattern": "feature/ALAMEDA-{key}-{summary-slug}",
+        "auto_transition": "In Progress"
+      },
+      "commit_linking": {
+        "enabled": true,
+        "pattern": "Refs: ALAMEDA-{key}",
+        "validate_on_commit": true
+      }
+    }
+  },
+  "git_hooks": {
+    "pre_commit": {
+      "validate_jira_reference": true,
+      "check_branch_naming": true,
+      "run_tests": false
+    },
+    "commit_msg": {
+      "validate_format": true,
+      "require_jira_reference": true,
+      "conventional_commits": true
+    },
+    "pre_push": {
+      "validate_jira_status": true,
+      "check_test_coverage": true
+    }
+  },
+  "reporting": {
+    "daily_standup": {
+      "query": "project = ALAMEDA AND assignee = currentUser() AND (status changed DURING (-1d, now()) OR status in ('In Progress', 'Code Review'))",
+      "format": "summary"
+    },
+    "sprint_progress": {
+      "query": "project = ALAMEDA AND sprint in openSprints()",
+      "group_by": "status",
+      "include_story_points": true
+    },
+    "test_coverage": {
+      "query": "project = ALAMEDA AND issuetype in ('Story', 'Task') AND 'Test Coverage Target' is not EMPTY",
+      "track_coverage": true
+    }
+  }
+}

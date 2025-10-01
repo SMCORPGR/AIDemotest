@@ -1,0 +1,145 @@
+{
+  "automation_rules": {
+    "git_branch_creation": {
+      "name": "Auto-transition on branch creation",
+      "trigger": "webhook",
+      "webhook_url": "/git/branch-created",
+      "conditions": [
+        {
+          "type": "branch_name_matches",
+          "pattern": "^(feature|bugfix|hotfix)/ALAMEDA-[0-9]+-.*"
+        }
+      ],
+      "actions": [
+        {
+          "type": "transition_issue",
+          "target_status": "In Progress"
+        },
+        {
+          "type": "add_comment",
+          "comment": "Development branch created: {{branch_name}}"
+        }
+      ]
+    },
+    "pull_request_opened": {
+      "name": "Auto-transition on PR creation",
+      "trigger": "webhook",
+      "webhook_url": "/git/pr-opened",
+      "conditions": [
+        {
+          "type": "pr_title_contains",
+          "pattern": "ALAMEDA-[0-9]+"
+        }
+      ],
+      "actions": [
+        {
+          "type": "transition_issue",
+          "target_status": "Code Review"
+        },
+        {
+          "type": "add_comment",
+          "comment": "Pull request opened: {{pr_url}}\nTitle: {{pr_title}}"
+        }
+      ]
+    },
+    "pull_request_merged": {
+      "name": "Auto-transition on PR merge",
+      "trigger": "webhook",
+      "webhook_url": "/git/pr-merged",
+      "actions": [
+        {
+          "type": "transition_issue",
+          "target_status": "Testing"
+        },
+        {
+          "type": "add_comment",
+          "comment": "Code merged to {{target_branch}}. Ready for testing."
+        }
+      ]
+    },
+    "test_case_creation": {
+      "name": "Auto-create test cases for stories",
+      "trigger": "issue_created",
+      "conditions": [
+        {
+          "type": "issue_type",
+          "value": "Story"
+        },
+        {
+          "type": "project",
+          "value": "ALAMEDA"
+        }
+      ],
+      "actions": [
+        {
+          "type": "create_linked_issue",
+          "issue_type": "Test Case",
+          "summary": "Test: {{issue.summary}}",
+          "description": "Test case for story {{issue.key}}:\n\n{{issue.description}}",
+          "link_type": "tests"
+        }
+      ]
+    },
+    "deployment_notification": {
+      "name": "Notify on deployment",
+      "trigger": "webhook",
+      "webhook_url": "/deployment/completed",
+      "actions": [
+        {
+          "type": "transition_issue",
+          "target_status": "Done"
+        },
+        {
+          "type": "add_comment",
+          "comment": "Deployed to {{environment}} successfully at {{deployment_time}}"
+        }
+      ]
+    }
+  },
+  "webhooks": {
+    "github_integration": {
+      "url": "https://your-domain.atlassian.net/rest/api/3/webhook",
+      "events": [
+        "push",
+        "pull_request",
+        "pull_request_review",
+        "deployment_status"
+      ],
+      "secret_env": "GITHUB_WEBHOOK_SECRET"
+    },
+    "salesforce_integration": {
+      "url": "https://your-domain.atlassian.net/rest/api/3/webhook",
+      "events": [
+        "deployment_completed",
+        "test_execution_completed",
+        "code_coverage_updated"
+      ],
+      "secret_env": "SALESFORCE_WEBHOOK_SECRET"
+    }
+  },
+  "smart_commits": {
+    "enabled": true,
+    "patterns": {
+      "transition": "ALAMEDA-{ticket_number} #{transition}",
+      "time_tracking": "ALAMEDA-{ticket_number} #time {time_spent}",
+      "comment": "ALAMEDA-{ticket_number} #comment {comment_text}"
+    },
+    "examples": [
+      "ALAMEDA-123 #in-progress Fixed authentication bug",
+      "ALAMEDA-456 #time 2h 30m Implemented user service",
+      "ALAMEDA-789 #comment Added validation for email field"
+    ]
+  },
+  "field_mappings": {
+    "salesforce_to_jira": {
+      "apex_class": "Salesforce Component Type",
+      "test_coverage": "Test Coverage Target",
+      "deployment_target": "Deployment Environment"
+    },
+    "git_to_jira": {
+      "branch_name": "Development Branch",
+      "commit_hash": "Latest Commit",
+      "pr_url": "Pull Request"
+    }
+  }
+}

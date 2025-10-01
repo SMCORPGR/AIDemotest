@@ -1,0 +1,232 @@
+{
+  "workflow": {
+    "name": "AIDemoTest Git Workflow",
+    "version": "1.0.0",
+    "description": "Git workflow configuration for AIDemoTest Salesforce project"
+  },
+  "branches": {
+    "main": {
+      "description": "Production-ready code",
+      "protection": {
+        "require_pull_request": true,
+        "require_status_checks": true,
+        "require_up_to_date": true,
+        "dismiss_stale_reviews": true,
+        "require_code_owner_reviews": false,
+        "required_approving_review_count": 1
+      }
+    },
+    "develop": {
+      "description": "Integration branch for features",
+      "protection": {
+        "require_pull_request": true,
+        "require_status_checks": true,
+        "require_up_to_date": false,
+        "dismiss_stale_reviews": false,
+        "required_approving_review_count": 1
+      }
+    }
+  },
+  "branch_naming": {
+    "conventions": {
+      "feature": {
+        "pattern": "feature/{TICKET}-{description}",
+        "example": "feature/ALAMEDA-123-lead-assignment",
+        "description": "New features or enhancements",
+        "regex": "^feature/[A-Z]+-[0-9]+-[a-z0-9-]+$"
+      },
+      "bugfix": {
+        "pattern": "bugfix/{TICKET}-{description}",
+        "example": "bugfix/ALAMEDA-456-login-error-fix",
+        "description": "Bug fixes",
+        "regex": "^bugfix/[A-Z]+-[0-9]+-[a-z0-9-]+$"
+      },
+      "hotfix": {
+        "pattern": "hotfix/{TICKET}-{description}",
+        "example": "hotfix/ALAMEDA-789-critical-security-patch",
+        "description": "Critical fixes for production",
+        "regex": "^hotfix/[A-Z]+-[0-9]+-[a-z0-9-]+$"
+      },
+      "release": {
+        "pattern": "release/{version}",
+        "example": "release/v1.2.0",
+        "description": "Release preparation branches",
+        "regex": "^release/v[0-9]+\\.[0-9]+\\.[0-9]+$"
+      },
+      "chore": {
+        "pattern": "chore/{TICKET}-{description}",
+        "example": "chore/ALAMEDA-101-update-dependencies",
+        "description": "Maintenance tasks, dependency updates",
+        "regex": "^chore/[A-Z]+-[0-9]+-[a-z0-9-]+$"
+      },
+      "docs": {
+        "pattern": "docs/{TICKET}-{description}",
+        "example": "docs/ALAMEDA-202-api-documentation",
+        "description": "Documentation updates",
+        "regex": "^docs/[A-Z]+-[0-9]+-[a-z0-9-]+$"
+      },
+      "refactor": {
+        "pattern": "refactor/{TICKET}-{description}",
+        "example": "refactor/ALAMEDA-303-code-cleanup",
+        "description": "Code refactoring without functional changes",
+        "regex": "^refactor/[A-Z]+-[0-9]+-[a-z0-9-]+$"
+      },
+      "test": {
+        "pattern": "test/{TICKET}-{description}",
+        "example": "test/ALAMEDA-404-unit-test-coverage",
+        "description": "Adding or updating tests",
+        "regex": "^test/[A-Z]+-[0-9]+-[a-z0-9-]+$"
+      }
+    },
+    "rules": {
+      "max_length": 50,
+      "use_lowercase": true,
+      "use_hyphens": true,
+      "no_spaces": true,
+      "require_ticket_id": true,
+      "ticket_format": "[A-Z]+-[0-9]+"
+    }
+  },
+  "commit_message": {
+    "format": "{type}({scope}): {description}",
+    "body_requirements": {
+      "require_ticket_reference": true,
+      "ticket_format": "Refs: {TICKET}",
+      "example": "Refs: ALAMEDA-123",
+      "jira_integration": {
+        "auto_link_commits": true,
+        "smart_commits_enabled": true,
+        "transition_on_commit": false
+      }
+    },
+    "types": [
+      "feat",
+      "fix",
+      "docs",
+      "style",
+      "refactor",
+      "test",
+      "chore",
+      "perf",
+      "ci",
+      "build"
+    ],
+    "scopes": [
+      "apex",
+      "lwc",
+      "aura",
+      "flows",
+      "objects",
+      "permissions",
+      "config",
+      "deployment",
+      "tests"
+    ],
+    "rules": {
+      "max_length": 72,
+      "require_type": true,
+      "require_description": true,
+      "use_imperative": true,
+      "capitalize_description": false,
+      "require_ticket_in_body": true
+    },
+    "examples": [
+      "feat(apex): add user authentication service\n\nRefs: ALAMEDA-123",
+      "fix(lwc): resolve data binding issue in contact form\n\nRefs: ALAMEDA-456",
+      "docs(config): update deployment guide\n\nRefs: ALAMEDA-789",
+      "test(apex): add unit tests for account trigger\n\nRefs: ALAMEDA-101",
+      "chore(dependencies): update salesforce cli version\n\nRefs: ALAMEDA-202"
+    ]
+  },
+  "pull_request": {
+    "permissions": {
+      "require_permission": true,
+      "message": "Always ask permission before creating PRs"
+    },
+    "jira_integration": {
+      "auto_link_to_ticket": true,
+      "transition_on_pr_open": "Code Review",
+      "transition_on_pr_merge": "Testing",
+      "add_pr_link_to_ticket": true
+    },
+    "template": {
+      "title_format": "[{branch-type}] {TICKET}: {description}",
+      "required_sections": [
+        "Description",
+        "Changes Made",
+        "Testing",
+        "Checklist",
+        "JIRA Ticket"
+      ]
+    },
+    "labels": {
+      "feature": ["enhancement", "feature"],
+      "bugfix": ["bug", "fix"],
+      "hotfix": ["hotfix", "critical"],
+      "chore": ["maintenance", "chore"],
+      "docs": ["documentation"],
+      "refactor": ["refactor", "cleanup"],
+      "test": ["testing"]
+    }
+  },
+  "salesforce_specific": {
+    "metadata_types": {
+      "apex_classes": "force-app/main/default/classes/",
+      "apex_triggers": "force-app/main/default/triggers/",
+      "lwc_components": "force-app/main/default/lwc/",
+      "aura_components": "force-app/main/default/aura/",
+      "flows": "force-app/main/default/flows/",
+      "objects": "force-app/main/default/objects/",
+      "permission_sets": "force-app/main/default/permissionsets/",
+      "profiles": "force-app/main/default/profiles/"
+    },
+    "deployment": {
+      "environments": {
+        "sandbox": {
+          "branch": "develop",
+          "auto_deploy": true,
+          "run_tests": true
+        },
+        "uat": {
+          "branch": "release/*",
+          "auto_deploy": false,
+          "run_tests": true,
+          "require_approval": true
+        },
+        "production": {
+          "branch": "main",
+          "auto_deploy": false,
+          "run_tests": true,
+          "require_approval": true,
+          "backup_required": true
+        }
+      }
+    }
+  },
+  "automation": {
+    "permissions": {
+      "require_permission_before_push": true,
+      "message": "Always ask permission before pushing to remote"
+    },
+    "hooks": {
+      "pre_commit": [
+        "prettier --check .",
+        "eslint force-app/main/default/lwc/",
+        "sf scanner run --target force-app/"
+      ],
+      "pre_push": [
+        "npm test",
+        "sf project deploy validate --source-dir force-app/"
+      ]
+    },
+    "ci_cd": {
+      "trigger_branches": ["main", "develop", "release/*", "hotfix/*"],
+      "required_checks": [
+        "unit_tests",
+        "code_coverage",
+        "security_scan",
+        "metadata_validation"
+      ]
+    }
+  }
+}

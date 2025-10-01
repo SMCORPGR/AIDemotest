@@ -1,0 +1,193 @@
+{
+  "project": {
+    "name": "AIDemoTest",
+    "key": "ALAMEDA",
+    "description": "Salesforce development project with AI-driven testing and automation",
+    "type": "software",
+    "lead": "project-lead@company.com"
+  },
+  "connection": {
+    "base_url": "https://your-domain.atlassian.net",
+    "authentication": {
+      "type": "api_token",
+      "username": "your-email@company.com",
+      "api_token_env": "JIRA_API_TOKEN",
+      "instructions": "Set JIRA_API_TOKEN environment variable with your Atlassian API token"
+    },
+    "api_version": "3"
+  },
+  "issue_types": {
+    "epic": {
+      "name": "Epic",
+      "description": "Large feature or initiative spanning multiple sprints",
+      "icon": "epic",
+      "color": "#904ee2",
+      "fields": ["summary", "description", "assignee", "priority", "labels", "epic_name"]
+    },
+    "story": {
+      "name": "Story",
+      "description": "User story representing a feature or requirement",
+      "icon": "story",
+      "color": "#65ba43",
+      "fields": ["summary", "description", "assignee", "priority", "story_points", "acceptance_criteria", "epic_link"]
+    },
+    "task": {
+      "name": "Task",
+      "description": "Development task or technical work item",
+      "icon": "task",
+      "color": "#4bade8",
+      "fields": ["summary", "description", "assignee", "priority", "original_estimate", "parent_link"]
+    },
+    "bug": {
+      "name": "Bug",
+      "description": "Defect or issue in existing functionality",
+      "icon": "bug",
+      "color": "#e5493a",
+      "fields": ["summary", "description", "assignee", "priority", "severity", "environment", "steps_to_reproduce"]
+    },
+    "test_case": {
+      "name": "Test Case",
+      "description": "Test case linked to user stories and features",
+      "icon": "test",
+      "color": "#f79232",
+      "fields": ["summary", "description", "test_steps", "expected_result", "test_data", "linked_story"]
+    },
+    "subtask": {
+      "name": "Sub-task",
+      "description": "Breakdown of larger work items",
+      "icon": "subtask",
+      "color": "#34d058",
+      "fields": ["summary", "description", "assignee", "original_estimate", "parent"]
+    }
+  },
+  "custom_fields": {
+    "salesforce_component_type": {
+      "name": "Salesforce Component Type",
+      "type": "select",
+      "options": ["Apex Class", "Apex Trigger", "LWC Component", "Aura Component", "Flow", "Custom Object", "Permission Set", "Profile", "Validation Rule", "Workflow", "Process Builder"],
+      "description": "Type of Salesforce component being developed"
+    },
+    "component_name": {
+      "name": "Component Name",
+      "type": "text",
+      "description": "Name of the Salesforce component (class name, component name, etc.)"
+    },
+    "test_coverage_target": {
+      "name": "Test Coverage Target",
+      "type": "number",
+      "description": "Target test coverage percentage for this component",
+      "default_value": 85
+    },
+    "deployment_environment": {
+      "name": "Deployment Environment",
+      "type": "select",
+      "options": ["Sandbox", "UAT", "Production"],
+      "description": "Target deployment environment"
+    },
+    "acceptance_criteria": {
+      "name": "Acceptance Criteria",
+      "type": "textarea",
+      "description": "Detailed acceptance criteria for the story"
+    },
+    "test_steps": {
+      "name": "Test Steps",
+      "type": "textarea",
+      "description": "Detailed test steps for test cases"
+    },
+    "expected_result": {
+      "name": "Expected Result",
+      "type": "textarea",
+      "description": "Expected result for test cases"
+    },
+    "test_data": {
+      "name": "Test Data",
+      "type": "textarea",
+      "description": "Test data requirements and setup"
+    }
+  },
+  "workflows": {
+    "story_workflow": {
+      "name": "Story Workflow",
+      "statuses": [
+        {"name": "Backlog", "category": "to_do"},
+        {"name": "Ready for Development", "category": "to_do"},
+        {"name": "In Progress", "category": "in_progress"},
+        {"name": "Code Review", "category": "in_progress"},
+        {"name": "Testing", "category": "in_progress"},
+        {"name": "Ready for Deployment", "category": "in_progress"},
+        {"name": "Done", "category": "done"}
+      ],
+      "transitions": [
+        {"from": "Backlog", "to": "Ready for Development", "name": "Start Planning"},
+        {"from": "Ready for Development", "to": "In Progress", "name": "Start Development"},
+        {"from": "In Progress", "to": "Code Review", "name": "Submit for Review"},
+        {"from": "Code Review", "to": "In Progress", "name": "Needs Rework"},
+        {"from": "Code Review", "to": "Testing", "name": "Approve Code"},
+        {"from": "Testing", "to": "In Progress", "name": "Failed Testing"},
+        {"from": "Testing", "to": "Ready for Deployment", "name": "Pass Testing"},
+        {"from": "Ready for Deployment", "to": "Done", "name": "Deploy to Production"}
+      ]
+    },
+    "bug_workflow": {
+      "name": "Bug Workflow",
+      "statuses": [
+        {"name": "Open", "category": "to_do"},
+        {"name": "In Progress", "category": "in_progress"},
+        {"name": "Fixed", "category": "in_progress"},
+        {"name": "Testing", "category": "in_progress"},
+        {"name": "Verified", "category": "done"},
+        {"name": "Closed", "category": "done"}
+      ]
+    }
+  },
+  "priorities": [
+    {"name": "Highest", "color": "#d04437", "description": "Critical issues blocking progress"},
+    {"name": "High", "color": "#f79232", "description": "Important issues that should be addressed soon"},
+    {"name": "Medium", "color": "#f1c40f", "description": "Standard priority issues"},
+    {"name": "Low", "color": "#14892c", "description": "Nice to have improvements"},
+    {"name": "Lowest", "color": "#4a6785", "description": "Future considerations"}
+  ],
+  "git_integration": {
+    "branch_linking": {
+      "enabled": true,
+      "pattern": "feature/{ticket_key}-{description}",
+      "auto_create_branch": true,
+      "branch_naming_validation": true
+    },
+    "commit_linking": {
+      "enabled": true,
+      "commit_message_pattern": "Refs: {ticket_key}",
+      "auto_transition_on_commit": false,
+      "required_in_commit_body": true
+    },
+    "pull_request_linking": {
+      "enabled": true,
+      "auto_link_on_pr_creation": true,
+      "pr_title_pattern": "[{branch_type}] {ticket_key}: {description}",
+      "auto_transition_on_merge": true,
+      "target_status_on_merge": "Testing"
+    },
+    "status_automation": {
+      "branch_created": "In Progress",
+      "pr_opened": "Code Review",
+      "pr_merged": "Testing",
+      "deployment_success": "Done"
+    }
+  },
+  "test_management": {
+    "test_case_generation": {
+      "auto_generate_for_stories": true,
+      "test_case_template": {
+        "summary": "Test: {story_summary}",
+        "description": "Automated test case for story {ticket_key}",
+        "test_steps": "1. Setup test data\n2. Execute test scenario\n3. Verify expected results",
+        "link_to_story": true
+      }
+    },
+    "test_execution": {
+      "link_test_results": true,
+      "auto_update_status": true,
+      "coverage_tracking": true
+    }
+  }
+}
