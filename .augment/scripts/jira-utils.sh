@@ -4,7 +4,7 @@
 # Usage: source .augment/scripts/jira-utils.sh
 
 # Configuration
-JIRA_PROJECT="ALAMEDA"
+JIRA_PROJECT="AITEST"
 JIRA_BASE_URL="${JIRA_BASE_URL:-https://your-domain.atlassian.net}"
 JIRA_USERNAME="${JIRA_USERNAME:-your-email@company.com}"
 

@@ -31,19 +31,19 @@
     "conventions": {
       "feature": {
         "pattern": "feature/{TICKET}-{description}",
-        "example": "feature/ALAMEDA-123-lead-assignment",
+        "example": "feature/AITEST-123-lead-assignment",
         "description": "New features or enhancements",
         "regex": "^feature/[A-Z]+-[0-9]+-[a-z0-9-]+$"
       },
       "bugfix": {
         "pattern": "bugfix/{TICKET}-{description}",
-        "example": "bugfix/ALAMEDA-456-login-error-fix",
+        "example": "bugfix/AITEST-456-login-error-fix",
         "description": "Bug fixes",
         "regex": "^bugfix/[A-Z]+-[0-9]+-[a-z0-9-]+$"
       },
       "hotfix": {
         "pattern": "hotfix/{TICKET}-{description}",
-        "example": "hotfix/ALAMEDA-789-critical-security-patch",
+        "example": "hotfix/AITEST-789-critical-security-patch",
         "description": "Critical fixes for production",
         "regex": "^hotfix/[A-Z]+-[0-9]+-[a-z0-9-]+$"
       },

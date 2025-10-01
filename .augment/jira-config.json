@@ -1,10 +1,10 @@
 {
   "project": {
     "name": "AIDemoTest",
-    "key": "ALAMEDA",
+    "key": "AITEST",
     "description": "Salesforce development project with AI-driven testing and automation",
     "type": "software",
-    "lead": "project-lead@company.com"
+    "lead": "guru@successmetrics.io"
   },
   "connection": {
     "base_url": "https://your-domain.atlassian.net",
