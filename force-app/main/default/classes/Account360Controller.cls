@@ -15,7 +15,7 @@ public with sharing class Account360Controller {
     public static List<Case> getCases(Id accountId) {
         try {
             if (accountId == null) {
-                throw new IllegalArgumentException('Account ID cannot be null');
+                throw new AuraHandledException('Account ID cannot be null');
             }
             
             return [
@@ -40,7 +40,7 @@ public with sharing class Account360Controller {
     public static List<Contact> getContacts(Id accountId) {
         try {
             if (accountId == null) {
-                throw new IllegalArgumentException('Account ID cannot be null');
+                throw new AuraHandledException('Account ID cannot be null');
             }
             
             return [
@@ -65,7 +65,7 @@ public with sharing class Account360Controller {
     public static List<Opportunity> getOpportunities(Id accountId) {
         try {
             if (accountId == null) {
-                throw new IllegalArgumentException('Account ID cannot be null');
+                throw new AuraHandledException('Account ID cannot be null');
             }
             
             return [
@@ -90,7 +90,7 @@ public with sharing class Account360Controller {
     public static Map<String, Integer> getAccountSummary(Id accountId) {
         try {
             if (accountId == null) {
-                throw new IllegalArgumentException('Account ID cannot be null');
+                throw new AuraHandledException('Account ID cannot be null');
             }
             
             Map<String, Integer> summary = new Map<String, Integer>();
@@ -130,7 +130,7 @@ public with sharing class Account360Controller {
     public static List<SObject> getRecentActivities(Id accountId) {
         try {
             if (accountId == null) {
-                throw new IllegalArgumentException('Account ID cannot be null');
+                throw new AuraHandledException('Account ID cannot be null');
             }
             
             List<SObject> activities = new List<SObject>();
@@ -162,9 +162,5 @@ public with sharing class Account360Controller {
             throw new AuraHandledException('Error retrieving recent activities: ' + e.getMessage());
         }
     }
-    
-    /**
-     * @description Custom exception class for illegal arguments
-     */
-    public class IllegalArgumentException extends Exception {}
+
 }
